@@ -1,0 +1,162 @@
+if(hoja_nombre != 'Patients'):
+                continue
+
+            for row in hoja_df.iterrows(): 
+                if (resultados.count==0):
+                    patient = Patient()  
+                    try:
+                        patient.Patient=row['Patient']
+                        patient.Labcode=row['Labcode']
+                        patient.Project=row['Project']
+                        patient.Cohort=row['Cohort']
+                        patient.CaseId=row['CaseId']
+                        patient.Center=row['Center']
+                        patient.CenterCode=row['CenterCode']
+                        patient.TrialCode=row['TrialCode']
+                        patient.ExternalId=row['ExternalId']
+                        patient.Specie=row['Specie']
+                        patient.Consent=row['Consent']
+                        patient.Disease=row['Disease']
+                        patient.EvolutiveStage=row['EvolutiveStage']
+                        patient.DiagnosisState=row['DiagnosisState']
+                        patient.DiagnosisDate=row['DiagnosisDate']
+                        patient.InclusionDate=row['InclusionDate']
+                        create_list.append(patient)
+                    except:
+                        continue
+                else:
+                    for fila in resultados:
+                        for fl in 
+                        if fila["Patient"] == fila["Labcode"]:
+                            print("Se encontró una fila con valores iguales en columna1 y columna2.")
+                            print(fila)
+                            break
+
+                    if(row['Patient']==fila[0] and  row['Labcode']==fila[1]):
+                        patient = Patient()  
+                        try:
+                            patient.Patient=row['Patient']
+                            patient.Labcode=row['Labcode']
+                            patient.Project=row['Project']
+                            patient.Cohort=row['Cohort']
+                            patient.CaseId=row['CaseId']
+                            patient.Center=row['Center']
+                            patient.CenterCode=row['CenterCode']
+                            patient.TrialCode=row['TrialCode']
+                            patient.ExternalId=row['ExternalId']
+                            patient.Specie=row['Specie']
+                            patient.Consent=row['Consent']
+                            patient.Disease=row['Disease']
+                            patient.EvolutiveStage=row['EvolutiveStage']
+                            patient.DiagnosisState=row['DiagnosisState']
+                            patient.DiagnosisDate=row['DiagnosisDate']
+                            patient.InclusionDate=row['InclusionDate']
+                            create_list.append(patient)
+                        except:
+                            continue
+
+                    
+                
+/////////////////////////
+def verify_token(request: Request):
+   
+    auth_header = request.headers.get("Authorization")
+    print('Token Value: '+ str(auth_header))
+    if auth_header is None or not auth_header.startswith("Bearer "):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authorization header missing or invalid",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    token = auth_header[len("Bearer "):]
+    
+    try:
+        au = AuthJWT()
+        username = au.validate(token)
+
+        if username is None:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+        return username
+        
+    except Exception as e:
+        raise  HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials",
+                headers={"WWW-Authenticate": "Bearer"},
+            )
+
+@v1_router.post("/login", tags=["v1"], responses={
+        200: {"model": Token},
+        400: {"model": ErrorMsg, "description": "Invalid credentials or other bad request error"}
+    })
+async def login(user: LoginCredential):
+    auth = AuthJWT()
+    try:       
+        return (auth.login(user))       
+    except Exception as e:
+        return JSONResponse(
+            status_code=400,
+            content=ErrorMsg(detail= str(e)),
+            headers={"Content-Type": "application/json"}
+        )
+
+@v1_router.post("/logout", tags=["v1"], responses={
+        200: {"model": ResultResponse},
+        400: {"model": ErrorMsg, "description": ""}
+    })
+async def logout(Authorization: str = Header(...)):
+    auth = AuthJWT()
+    token = Authorization.replace("Bearer", "")  # Elimina el prefijo "Bearer " si es necesario
+    token = token.strip()
+    try:          
+        return ResultResponse(data=auth.logout(token))       
+    except Exception as e:
+       return JSONResponse(
+            status_code=400,
+            content=ErrorMsg(detail= str(e)),
+            headers={"Content-Type": "application/json"}
+        )
+
+@v1_router.post("/validate_token", tags=["v1"], responses={
+        200: {"model": ResultResponse},
+        400: {"model": ErrorMsg, "description": ""}
+    })
+async def validate_token(Authorization: str = Header(...)):
+    auth = AuthJWT()
+    token = Authorization.replace("Bearer", "")  # Elimina el prefijo "Bearer " si es necesario
+    token = token.strip()
+    try:          
+        return ResultResponse(data=auth.validate(token))       
+    except Exception as e:
+        return JSONResponse(
+            status_code=400,
+            #content={"detail": str(e)},
+            content=(ErrorMsg(detail=str(e))).model_dump(),
+            headers={"Content-Type": "application/json"}
+        )
+////////////////////////
+                
+////////
+from fastapi import FastAPI, APIRouter, UploadFile, HTTPException, status, Request, Depends, Query, Header,File
+ 
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+
+from models.Token import Token
+from models.ResultResponse import ResultResponse
+from models.ErrorMsg import ErrorMsg
+
+from database.PatientService import PatientService
+
+from typing import List
+
+from auth.AuthJWT import AuthJWT
+from io import BytesIO
+from database.MySQLConnection import MySQLConnection
+////////
+nohup uvicorn healthcare:app --host 0.0.0.0 --port 8000 &

@@ -1,0 +1,9 @@
+python-multipart
+fastapi[standard]
+uvicorn
+pydantic
+python-dotenv
+requests
+pandas
+openpyxl
+mysql-connector-python
