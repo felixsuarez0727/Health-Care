@@ -51,8 +51,9 @@ cd healthcare-backend
 ```
 
 2. Create and activate virtual environment
+
 ```bash
-# Create virtual environment
+#Create virtual environment
 python -m venv venv
 
 # Activate on Windows
@@ -60,6 +61,8 @@ venv\Scripts\activate
 
 # Activate on Unix or MacOS
 source venv/bin/activate
+# or
+source venv/Scripts/Activate
 ```
 
 3. Install dependencies
@@ -154,6 +157,77 @@ docker build -t healthcare-backend .
 # Run container
 docker run -p 8000:8000 healthcare-backend
 ```
+# Health Care Front-End API
+
+This project is the front-end of a healthcare web application. It includes a page to upload an Excel file with patient information to the database and has another page to register users. The application consists of two pages, each designed for a specific function within the user's workflow.
+
+## Index
+
+1. 🛠️ [Prerequisites](#-prerequisites)
+2. 🚀 [Setup and Development](#-setup-and-development)
+3. 💻 [Functionalities](#-functionalities)
+4. 📌[Contact](#contact-)
+
+## 🛠️ Prerequisites
+
+- Visual Studio Code
+- node_modules == 22.11.0
+- vite
+- Git
+- SSH key (for repository cloning)
+- Live Server extension for VS Code
+- Web browser
+
+
+
+## 🚀 Setup and Development
+
+1. Clone the repository
+```bash
+git clone <repository-url>
+cd healthcare_frontend
+```
+
+2. **Open the project in Visual Studio Code:**
+   ```
+   code .
+   ```
+
+3. **Install the Live Server extension:**
+   - Open the Extensions view in VS Code (Ctrl+Shift+X)
+   - Search for "Live Server"
+   - Click "Install" on the extension by Ritwick Dey
+
+4. **Install dependencies:**
+
+   ```
+   npm install 
+   npm install vite --save-dev
+   ```
+
+5. **Run the project:**
+   ```
+   npm run dev
+   ```
+   - The application will open in your default web browser using a local server (usually ` http://localhost:5173/` or similar)
+
+6. **Development:**
+   - Make changes to your HTML, CSS, or JavaScript files
+   - Save the files
+   - The browser will automatically refresh to show your changes
+   
+
+# 📋 FUNCTIONALITIES OF EACH TAB
+
+## 🏠 Home (Home.jsx)
+
+The Landing Page section provides users with an interface where they can upload xlsx files to save the information they contain in the database.
+
+##  ✏️ Patient Records (PatientRecords.jsx)
+
+
+The Landing Page section provides users with an interface where they can search for specific patient information in the database.
+
 
 ## Contact 📌
 
